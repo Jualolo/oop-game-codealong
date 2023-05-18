@@ -1,9 +1,9 @@
 class Player {
     constructor(){
-        this.positionX = 50;
-        this.positionY = 0;
         this.width = 20;
         this.height = 10;
+        this.positionX = 50 - this.width/2;
+        this.positionY = 0;
 
         this.domElement = null; // we will store a ref. to the dom element of the player
 
@@ -40,10 +40,10 @@ class Player {
 
 class Obstacle {
     constructor(){
-        this.positionX = 50;
-        this.positionY = 100;
         this.width = 20;
         this.height = 10;
+        this.positionX = 50 - this.width/2;
+        this.positionY = 100;
 
         this.domElement = null;
 
@@ -83,12 +83,14 @@ setInterval(() => {
 }, 4000);
 
 
-// Move all obstacles
+// Update obstacles
 setInterval(() => {
     obstaclesArr.forEach((obstacleInstance) => {
 
+        // Move current obstacle
         obstacleInstance.moveDown();
 
+        // Detect collision
         if (obstacleInstance.positionX < player.positionX + player.width &&
             obstacleInstance.positionX + obstacleInstance.width > player.positionX &&
             obstacleInstance.positionY < player.positionY + player.height &&
