@@ -86,7 +86,17 @@ setInterval(() => {
 // Move all obstacles
 setInterval(() => {
     obstaclesArr.forEach((obstacleInstance) => {
+
         obstacleInstance.moveDown();
+
+        if (obstacleInstance.positionX < player.positionX + player.width &&
+            obstacleInstance.positionX + obstacleInstance.width > player.positionX &&
+            obstacleInstance.positionY < player.positionY + player.height &&
+            obstacleInstance.height + obstacleInstance.positionY > player.positionY) {
+            console.log("game over my fren");
+            location.href = './gameover.html';
+        }
+
     });
 }, 60);
 
