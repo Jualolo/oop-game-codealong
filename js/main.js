@@ -99,6 +99,17 @@ setInterval(() => {
             location.href = './gameover.html';
         }
 
+        // Detect if obstacle needs to be removed
+        if(obstacleInstance.positionY < 0 - obstacleInstance.height){
+
+            //1. remove elm from the dom
+            obstacleInstance.domElement.remove();
+
+            //2. remove from the array of obstacles
+            obstaclesArr.shift(); //remove from the array
+
+        }
+
     });
 }, 60);
 
