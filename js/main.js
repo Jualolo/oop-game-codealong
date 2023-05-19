@@ -1,3 +1,73 @@
+class Game {
+    constructor(){
+        this.player = null;
+        this.obstaclesArr = []; // will store instances of the class Obstacle
+    }
+    
+    start(){
+        this.player = new Player();
+
+        this.attachEventListeners();
+        
+        // Create new obstacles
+        setInterval(() => {
+            const newObstacle = new Obstacle();
+            this.obstaclesArr.push(newObstacle);
+        }, 4000);
+
+
+        // Update obstacles
+        setInterval(() => {
+            this.obstaclesArr.forEach((obstacleInstance) => {
+
+                // Move current obstacle
+                obstacleInstance.moveDown();
+
+                // Detect collision
+                this.detectCollision(obstacleInstance);
+
+                // Detect if obstacle needs to be removed
+                this.removeObstacleIfOutside(obstacleInstance);
+
+            });
+        }, 60);
+    }
+
+    attachEventListeners() {
+        document.addEventListener("keydown", (event) => {
+            if (event.code === "ArrowLeft") {
+                this.player.moveLeft();
+            } else if (event.code === "ArrowRight") {
+                this.player.moveRight();
+            }
+        })
+    }
+
+    detectCollision(obstacleInstance){
+        if (obstacleInstance.positionX < this.player.positionX + this.player.width &&
+            obstacleInstance.positionX + obstacleInstance.width > this.player.positionX &&
+            obstacleInstance.positionY < this.player.positionY + this.player.height &&
+            obstacleInstance.height + obstacleInstance.positionY > this.player.positionY) {
+            console.log("game over my fren");
+            location.href = './gameover.html';
+        }
+    }
+
+    removeObstacleIfOutside(obstacleInstance) {
+        if (obstacleInstance.positionY < 0 - obstacleInstance.height) {
+
+            //1. remove elm from the dom
+            obstacleInstance.domElement.remove();
+
+            //2. remove from the array of obstacles
+            this.obstaclesArr.shift();
+        }
+    }
+
+}
+
+
+
 class Player {
     constructor(){
         this.width = 20;
@@ -72,54 +142,7 @@ class Obstacle {
 
 
 
-const player = new Player();
-const obstaclesArr = []; // will store instances of the class Obstacle
+const game = new Game();
+game.start();
 
-
-// Create new obstacles
-setInterval(() => {
-   const newObstacle = new Obstacle();
-   obstaclesArr.push(newObstacle);
-}, 4000);
-
-
-// Update obstacles
-setInterval(() => {
-    obstaclesArr.forEach((obstacleInstance) => {
-
-        // Move current obstacle
-        obstacleInstance.moveDown();
-
-        // Detect collision
-        if (obstacleInstance.positionX < player.positionX + player.width &&
-            obstacleInstance.positionX + obstacleInstance.width > player.positionX &&
-            obstacleInstance.positionY < player.positionY + player.height &&
-            obstacleInstance.height + obstacleInstance.positionY > player.positionY) {
-            console.log("game over my fren");
-            location.href = './gameover.html';
-        }
-
-        // Detect if obstacle needs to be removed
-        if(obstacleInstance.positionY < 0 - obstacleInstance.height){
-
-            //1. remove elm from the dom
-            obstacleInstance.domElement.remove();
-
-            //2. remove from the array of obstacles
-            obstaclesArr.shift(); //remove from the array
-
-        }
-
-    });
-}, 60);
-
-
-// Attach event listeners...
-document.addEventListener("keydown", (event) => {
-    if(event.code === "ArrowLeft"){
-        player.moveLeft();
-    } else if (event.code === "ArrowRight"){
-        player.moveRight();
-    }
-})
 
